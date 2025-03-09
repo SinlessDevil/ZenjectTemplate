@@ -1,5 +1,4 @@
 using System;
-using StaticData.Levels;
 using UnityEngine;
 
 namespace StaticData
@@ -10,8 +9,6 @@ namespace StaticData
         public string LevelName;
         public int LevelId;
         public LevelTypeId LevelTypeId;
-        public GameObject LevelHolder;
-        public LevelConfig LevelConfig = new LevelConfig();
     }
 
     [Serializable]
@@ -22,11 +19,4 @@ namespace StaticData
         Bonus = 2,
     }
     
-    [Serializable]
-    public class LevelConfig
-    {
-        public int CountItem;
-        public LevelRandomConfigStaticData RandomConfig;
-        public LevelScoreStaticData ScoreConfig;
-    }
 }

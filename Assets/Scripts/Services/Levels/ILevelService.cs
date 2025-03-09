@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Logic.Zuma.Level;
 using Services.PersistenceProgress.Player;
 using StaticData;
 using StaticData.Levels;
@@ -15,8 +14,6 @@ namespace Services.Levels
         public int GetCurrentChapterIndex();
         public void SetUpCurrentLevel(int levelNumber, int chapterId);
         public void LevelsComplete();
-        public void SetLevelHolder(LevelHolder levelHolder);
-        public LevelHolder GetLevelHolder();
         public void Cleanup();
         List<ChapterStaticData> GetAllChapters();
         bool IsLevelCompleted(int chapterId, int levelId);

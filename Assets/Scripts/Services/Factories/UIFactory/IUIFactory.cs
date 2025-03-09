@@ -18,6 +18,5 @@ namespace Services.Factories.UIFactory
         public MenuHud CreateMenuHud();
         public Widget CreateWidget(Vector3 position, Quaternion rotation);
         public ItemLevel CreateItemLevel(Transform parent);
-        public StartLevelInfoDisplayer CreateStartLevelInfoDisplayer();
     }
 }

@@ -63,12 +63,5 @@ namespace Services.Factories.UIFactory
             GameObject itemLevel = Instantiate(ResourcePath.ItemLevelPath, parent, true);
             return itemLevel.GetComponent<ItemLevel>();
         }
-
-        public StartLevelInfoDisplayer CreateStartLevelInfoDisplayer()
-        {
-            GameObject window = Instantiate(ResourcePath.StarStartLevelInfoPath, _uiRoot, true);
-            StartLevelInfoDisplayer startLevelInfoDisplayer = window.GetComponent<StartLevelInfoDisplayer>();
-            return startLevelInfoDisplayer;
-        }
     }
 }

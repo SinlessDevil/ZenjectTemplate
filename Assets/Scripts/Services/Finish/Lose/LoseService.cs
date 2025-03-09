@@ -28,13 +28,8 @@ namespace Services.Finish.Lose
         
         public void Lose()
         {
-            var recordTime = GetRecordText();
-            var scoreText = GetScoreText();
-            
             var window = _windowService.Open(WindowTypeId.Lose);
             var loseWindow = window.GetComponent<LoseWindow>();
-            loseWindow.SetTime(recordTime);
-            loseWindow.SetScore(scoreText);
             loseWindow.Initialize();
         }
         

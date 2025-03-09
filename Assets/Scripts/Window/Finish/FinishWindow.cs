@@ -5,14 +5,8 @@ namespace Window.Finish
 {
     public abstract class FinishWindow : MonoBehaviour
     {
-        [SerializeField] protected Text _textTime;
-        [SerializeField] protected Text _textScore;
         [SerializeField] protected Button _buttonLoadLevel;
         [SerializeField] protected Button _buttonExitToMenu;
-
-        public abstract void SetTime(string time);
-
-        public abstract void SetScore(string score);
 
         protected virtual void SubscribeEvents()
         {

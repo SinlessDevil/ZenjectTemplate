@@ -1,20 +1,16 @@
 using System.Collections.Generic;
 using System.Linq;
-using Logic.Zuma.Level;
 using Services.PersistenceProgress;
 using Services.PersistenceProgress.Player;
 using Services.StaticData;
 using Services.Timer;
 using StaticData;
 using StaticData.Levels;
-using UnityEngine;
 
 namespace Services.Levels
 {
     public class LevelService : ILevelService
     {
-        private LevelHolder _levelHolder;
-        
         private readonly IPersistenceProgressService _persistenceProgressService;
         private readonly IStaticDataService _staticDataService;
         private readonly ITimeService _timerService;
@@ -64,7 +60,12 @@ namespace Services.Levels
             _persistenceProgressService.PlayerData.PlayerLevelData.CurrentProgress.LevelId = levelNumber;
             _persistenceProgressService.PlayerData.PlayerLevelData.CurrentProgress.ChapterId = chapterId;
         }
-        
+
+        public void Cleanup()
+        {
+            
+        }
+
         public List<ChapterStaticData> GetAllChapters()
         {
             HashSet<int> addedChapters = new HashSet<int>();
@@ -148,21 +149,6 @@ namespace Services.Levels
         {
             return _persistenceProgressService.PlayerData.PlayerLevelData.LastProgress.ChapterId == chapterId &&
                    _persistenceProgressService.PlayerData.PlayerLevelData.LastProgress.LevelId == levelId;
-        }
-        
-        public void SetLevelHolder(LevelHolder levelHolder)
-        {
-            _levelHolder = levelHolder;
-        }
-
-        public LevelHolder GetLevelHolder()
-        {
-            return _levelHolder;
-        }
-
-        public void Cleanup()
-        {
-            _levelHolder = null;
         }
     }
 }

@@ -1,7 +1,6 @@
 using Infrastructure.StateMachine;
 using Infrastructure.StateMachine.Game;
 using Infrastructure.StateMachine.Game.States;
-using Services.BallControllers;
 using Services.Factories.Game;
 using Services.Factories.UIFactory;
 using Services.Finish;
@@ -11,7 +10,6 @@ using Services.Input;
 using Services.Levels;
 using Services.LocalProgress;
 using Services.PersistenceProgress;
-using Services.Provides.Balls;
 using Services.Provides.Widgets;
 using Services.Random;
 using Services.SaveLoad;
@@ -69,13 +67,11 @@ namespace Infrastructure.Installers
             Container.BindInterfacesTo<PersistenceProgressService>().AsSingle();
             Container.BindInterfacesTo<RandomService>().AsSingle();
             Container.BindInterfacesTo<SaveLoadService>().AsSingle();
-            Container.BindInterfacesTo<BallProvider>().AsSingle();
             Container.BindInterfacesTo<WidgetProvider>().AsSingle();
             Container.BindInterfacesTo<LevelService>().AsSingle();
             Container.BindInterfacesTo<FinishService>().AsSingle();
             Container.BindInterfacesTo<WinService>().AsSingle();
             Container.BindInterfacesTo<LoseService>().AsSingle();
-            Container.BindInterfacesTo<BallChainController>().AsSingle();
             Container.BindInterfacesTo<LevelLocalProgressService>().AsSingle();
         }
 

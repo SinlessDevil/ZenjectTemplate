@@ -50,8 +50,6 @@ namespace Services.Finish.Win
             
             var window = _windowService.Open(WindowTypeId.Win);
             var winWindow = window.GetComponent<WinWindow>();
-            winWindow.SetTime(recordTime);
-            winWindow.SetScore(scoreText);
             winWindow.Initialize();
         }
 
@@ -61,17 +59,12 @@ namespace Services.Finish.Win
             
             CompleteTutor();
 
-            var recordTime = GetRecordText();
-            var scoreText = GetScoreText();
-
             SetRecordText();
             
             SaveProgress();
             
             var window = _windowService.Open(WindowTypeId.Bonus);
             var bonusWindow = window.GetComponent<BonusWindow>();
-            bonusWindow.SetTime(recordTime);
-            bonusWindow.SetScore(scoreText);
             bonusWindow.Initialize();
         }
         

@@ -8,11 +8,6 @@ namespace UI.Game
 {
     public class GameHud : MonoBehaviour
     {
-        [Space(10)] [Header("Displayer")]
-        [SerializeField] private TypeLevelDisplayer _typeLevelDisplayer;
-        [SerializeField] private LevelDisplayer _levelDisplayer;
-        [SerializeField] private ScoreDisplayer _scoreDisplayer;
-        [SerializeField] private TimeDisplayer _timeDisplayer;
         [Space(10)] [Header("Other")]
         [SerializeField] private InputZona _inputZona;
         [SerializeField] private List<GameObject> _debugObjects;
@@ -30,19 +25,8 @@ namespace UI.Game
         public void Initialize()
         {
             InitDebugObjects();
-
-            _levelDisplayer.Initialize();
-            _typeLevelDisplayer.Initialize();
-            _scoreDisplayer.Initialize();
-            _timeDisplayer.Initialize();
             
             TrySetUpEventSystem();
-        }
-
-        private void OnDestroy()
-        {
-            _scoreDisplayer.Dispose();
-            _timeDisplayer.Dispose();
         }
 
         private void InitDebugObjects()

@@ -15,11 +15,9 @@ namespace Services.StaticData
         private BalanceStaticData _balanceStaticData;
         private Dictionary<WindowTypeId, WindowConfig> _windowConfigs;
         private List<ChapterStaticData> _chapterStaticDatas = new();
-        private BallChainStaticData _ballChainConfig;
         
         public GameStaticData GameConfig => _gameStaticData;
         public BalanceStaticData Balance => _balanceStaticData;
-        public BallChainStaticData BallChainConfig => _ballChainConfig;
         public List<ChapterStaticData> Chapters => _chapterStaticDatas;
         
         public void LoadData()
@@ -29,9 +27,6 @@ namespace Services.StaticData
             
             _balanceStaticData = Resources
                 .Load<BalanceStaticData>(ResourcePath.GameBalancePath);
-
-            _ballChainConfig = Resources
-                .Load<BallChainStaticData>(ResourcePath.BallChainConfigPath);
             
             _windowConfigs = Resources
                 .Load<WindowStaticData>(ResourcePath.WindowsStaticDataPath)

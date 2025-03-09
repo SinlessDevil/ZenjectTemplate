@@ -37,16 +37,6 @@ namespace Window.Finish.Lose
             SubscribeEvents();
         }
         
-        public override void SetTime(string time)
-        {
-            _textTime.text = time;
-        }
-        
-        public override void SetScore(string score)
-        {
-            _textScore.text = score;
-        }
-        
         protected override void OnLoadLevelButtonClick()
         {
             _soundService.ButtonClick();
