@@ -1,10 +1,8 @@
 using Services.Levels;
-using Services.LocalProgress;
 using Services.PersistenceProgress;
 using Services.SaveLoad;
 using Services.Timer;
 using Services.Window;
-using UnityEngine;
 using Window;
 using Window.Finish.Win;
 
@@ -13,7 +11,6 @@ namespace Services.Finish.Win
     public class WinService : IWinService
     {
         private readonly IWindowService _windowService;
-        private readonly ILevelLocalProgressService _levelLocalProgressService;
         private readonly ILevelService _levelService;
         private readonly ISaveLoadService _saveLoadService;
         private readonly IPersistenceProgressService _persistenceProgressService;
@@ -21,14 +18,12 @@ namespace Services.Finish.Win
 
         public WinService(
             IWindowService windowService, 
-            ILevelLocalProgressService levelLocalProgressService,
             ILevelService levelService,
             ISaveLoadService saveLoadService,
             IPersistenceProgressService persistenceProgressService,
             ITimeService timeService)
         {
             _windowService = windowService;
-            _levelLocalProgressService = levelLocalProgressService;
             _levelService = levelService;
             _saveLoadService = saveLoadService;
             _persistenceProgressService = persistenceProgressService;
@@ -40,9 +35,6 @@ namespace Services.Finish.Win
             CompleteLevel();
             
             CompleteTutor();
-
-            var recordTime = GetRecordText();
-            var scoreText = GetScoreText();
 
             SetRecordText();
             
@@ -105,24 +97,6 @@ namespace Services.Finish.Win
             }
             
             return currentLevelContainer.Time;
-        }
-
-        private string GetRecordText()
-        {
-            var currentRecordTime = GetCurrentRecordTime();
-            var currentTime = _timeService.GetElapsedTime();
-            
-            if(currentRecordTime == 0 || currentTime > currentRecordTime)
-            {
-                return "New Record! Time: " + _timeService.GetFormattedElapsedTime();
-            }
-
-            return "Record: " + _timeService.GetFormattedElapsedTime();
-        }
-
-        private string GetScoreText()
-        {
-            return "Score: " + _levelLocalProgressService.Score;
         }
         
         private void SaveProgress()
