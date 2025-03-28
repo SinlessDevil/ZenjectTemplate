@@ -4,10 +4,10 @@ using Window;
 
 namespace StaticData
 {
-  [Serializable]
-  public class WindowConfig
-  {
-    public WindowTypeId WindowTypeId;
-    public GameObject Prefab;
-  }
+    [Serializable]
+    public class WindowConfig
+    {
+        public WindowTypeId WindowTypeId;
+        public GameObject Prefab;
+    }
 }
