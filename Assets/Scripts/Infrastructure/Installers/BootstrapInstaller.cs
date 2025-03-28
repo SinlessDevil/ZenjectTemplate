@@ -15,6 +15,7 @@ using Services.Random;
 using Services.SaveLoad;
 using Services.SFX;
 using Services.StaticData;
+using Services.Storage;
 using Services.Timer;
 using Services.Window;
 using UnityEngine;
@@ -73,6 +74,7 @@ namespace Infrastructure.Installers
             Container.BindInterfacesTo<WinService>().AsSingle();
             Container.BindInterfacesTo<LoseService>().AsSingle();
             Container.BindInterfacesTo<LevelLocalProgressService>().AsSingle();
+            Container.BindInterfacesTo<StorageService>().AsSingle();
         }
 
         private void BindGameStateMachine()

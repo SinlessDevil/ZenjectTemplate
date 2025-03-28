@@ -8,5 +8,6 @@ namespace Services.PersistenceProgress.Player
         public PlayerLevelData PlayerLevelData = new();
         public PlayerSettings PlayerSettings = new();
         public PlayerTutorialData PlayerTutorialData = new();
+        public PlayerResources PlayerResources = new();
     }
 }
