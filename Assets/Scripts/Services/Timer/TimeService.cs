@@ -3,7 +3,7 @@ using System;
 
 namespace Services.Timer
 {
-    public class TimeService : MonoBehaviour, ITimeService
+    public class TimeService : ITimeService
     {
         private float _startTime;
         private float _elapsedTime;

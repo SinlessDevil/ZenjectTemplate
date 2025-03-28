@@ -30,7 +30,6 @@ namespace Infrastructure.Installers
         [SerializeField] private LoadingCurtain _curtain;
         [SerializeField] private SoundService _soundService;
         [SerializeField] private MusicService _musicService;
-        [SerializeField] private TimeService _timeService;
         
         private RuntimePlatform Platform => Application.platform;
 
@@ -52,7 +51,6 @@ namespace Infrastructure.Installers
             Container.Bind<ILoadingCurtain>().FromMethod(() => Container.InstantiatePrefabForComponent<ILoadingCurtain>(_curtain)).AsSingle();
             Container.Bind<ISoundService>().FromMethod(() => Container.InstantiatePrefabForComponent<ISoundService>(_soundService)).AsSingle();
             Container.Bind<IMusicService>().FromMethod(() => Container.InstantiatePrefabForComponent<IMusicService>(_musicService)).AsSingle();
-            Container.Bind<ITimeService>().FromMethod(() => Container.InstantiatePrefabForComponent<ITimeService>(_timeService)).AsSingle();
             
             BindSceneLoader();
         }
@@ -75,6 +73,7 @@ namespace Infrastructure.Installers
             Container.BindInterfacesTo<LoseService>().AsSingle();
             Container.BindInterfacesTo<LevelLocalProgressService>().AsSingle();
             Container.BindInterfacesTo<StorageService>().AsSingle();
+            Container.BindInterfacesTo<TimeService>().AsSingle();
         }
 
         private void BindGameStateMachine()
@@ -111,7 +110,6 @@ namespace Infrastructure.Installers
             Container.Bind<GameLoopState>().AsSingle();
         }
 
-        private void BootstrapGame() => 
-            Container.Resolve<IStateMachine<IGameState>>().Enter<BootstrapState>();
+        private void BootstrapGame() => Container.Resolve<IStateMachine<IGameState>>().Enter<BootstrapState>();
     }
 }
