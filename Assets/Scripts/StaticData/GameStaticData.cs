@@ -1,4 +1,5 @@
 using System;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace StaticData
@@ -21,7 +22,7 @@ namespace StaticData
         [Space(10)] [Header("Debug")]
         public bool DebugMode = true;
     }
-
+    
     [Serializable]
     public class LogStackTrace
     {
