@@ -1,6 +1,6 @@
+using Code.StaticData;
 using FluentAssertions;
 using NUnit.Framework;
-using StaticData;
 using UnityEngine;
 
 namespace Tests.EditMode
