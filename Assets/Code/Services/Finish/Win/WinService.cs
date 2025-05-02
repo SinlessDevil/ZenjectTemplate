@@ -12,20 +12,20 @@ namespace Code.Services.Finish.Win
     {
         private readonly IWindowService _windowService;
         private readonly ILevelService _levelService;
-        private readonly ISaveLoadService _saveLoadService;
+        private readonly ISaveLoadFacade _saveLoadFacade;
         private readonly IPersistenceProgressService _persistenceProgressService;
         private readonly ITimeService _timeService;
 
         public WinService(
             IWindowService windowService, 
             ILevelService levelService,
-            ISaveLoadService saveLoadService,
+            ISaveLoadFacade saveLoadFacade,
             IPersistenceProgressService persistenceProgressService,
             ITimeService timeService)
         {
             _windowService = windowService;
             _levelService = levelService;
-            _saveLoadService = saveLoadService;
+            _saveLoadFacade = saveLoadFacade;
             _persistenceProgressService = persistenceProgressService;
             _timeService = timeService;
         }
@@ -101,7 +101,7 @@ namespace Code.Services.Finish.Win
         
         private void SaveProgress()
         {
-            _saveLoadService.SaveProgress();
+            _saveLoadFacade.SaveProgress(SaveMethod.PlayerPrefs);
         }
     }
 }

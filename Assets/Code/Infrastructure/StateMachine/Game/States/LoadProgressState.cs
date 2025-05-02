@@ -8,16 +8,16 @@ namespace Code.Infrastructure.StateMachine.Game.States
     {
         private readonly IStateMachine<IGameState> _stateMachine;
         private readonly IPersistenceProgressService _progressService;
-        private readonly ISaveLoadService _saveLoadService;
+        private readonly ISaveLoadFacade _saveLoadFacade;
 
         public LoadProgressState(
             IStateMachine<IGameState> stateMachine, 
             IPersistenceProgressService progressService, 
-            ISaveLoadService saveLoadService)
+            ISaveLoadFacade saveLoadFacade)
         {
             _stateMachine = stateMachine;
             _progressService = progressService;
-            _saveLoadService = saveLoadService;
+            _saveLoadFacade = saveLoadFacade;
         }
 
         public void Enter()
@@ -35,14 +35,15 @@ namespace Code.Infrastructure.StateMachine.Game.States
         private PlayerData LoadOrCreatePlayerData()
         {
             var playerData = _progressService.PlayerData =
-                _saveLoadService.LoadProgress() != null ? _saveLoadService.LoadProgress() : CreatePlayerData();
+                _saveLoadFacade.Load(SaveMethod.PlayerPrefs) != null ? 
+                    _saveLoadFacade.Load(SaveMethod.PlayerPrefs) : 
+                    CreatePlayerData();
             return playerData;
         }
         
         private PlayerData CreatePlayerData()
         {
             PlayerData playerData = new PlayerData();
-
             return playerData;
         }
     }

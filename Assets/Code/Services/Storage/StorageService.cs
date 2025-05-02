@@ -8,14 +8,14 @@ namespace Code.Services.Storage
     public class StorageService : IStorageService
     {
         private readonly IPersistenceProgressService _persistenceProgressService;
-        private readonly ISaveLoadService _saveLoadService;
+        private readonly ISaveLoadFacade _saveLoadFacade;
 
         public StorageService(
             IPersistenceProgressService persistenceProgressService, 
-            ISaveLoadService saveLoadService)
+            ISaveLoadFacade saveLoadFacade)
         {
             _persistenceProgressService = persistenceProgressService;
-            _saveLoadService = saveLoadService;
+            _saveLoadFacade = saveLoadFacade;
         }
         
         public event Action<Currency> ChangedCurrencyEvent;
@@ -24,7 +24,7 @@ namespace Code.Services.Storage
         {
             Currency currency = GetCurrency(currencyType);
             currency.Value += value;
-            _saveLoadService.SaveProgress();
+            _saveLoadFacade.SaveProgress(SaveMethod.PlayerPrefs);
             ChangedCurrencyEvent?.Invoke(currency);
         }
 
@@ -32,7 +32,7 @@ namespace Code.Services.Storage
         {
             Currency targetCurrency = GetCurrency(currency.CurrencyType);
             targetCurrency.Value += currency.Value;
-            _saveLoadService.SaveProgress();
+            _saveLoadFacade.SaveProgress(SaveMethod.PlayerPrefs);
             ChangedCurrencyEvent?.Invoke(targetCurrency);
         }
 
@@ -40,7 +40,7 @@ namespace Code.Services.Storage
         {
             Currency currency = GetCurrency(currencyType);
             currency.Value = Mathf.Min(currency.Value - value, 0);
-            _saveLoadService.SaveProgress();
+            _saveLoadFacade.SaveProgress(SaveMethod.PlayerPrefs);
             ChangedCurrencyEvent?.Invoke(currency);
         }
 
@@ -48,7 +48,7 @@ namespace Code.Services.Storage
         {
             Currency targetCurrency = GetCurrency(currency.CurrencyType);
             targetCurrency.Value = Mathf.Min(currency.Value - currency.Value, 0);
-            _saveLoadService.SaveProgress();
+            _saveLoadFacade.SaveProgress(SaveMethod.PlayerPrefs);
             ChangedCurrencyEvent?.Invoke(currency);
         }
         
