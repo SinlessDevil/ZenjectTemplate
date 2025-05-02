@@ -16,7 +16,7 @@ namespace Code.Editor.AudioVibration
         private const string VIBRATION_DATA_PATH = "StaticData/Vibration/VibrationsData";
         private const string ENUM_OUTPUT_PATH = "Assets/Code/Services/AudioVibrationFX/Vibration/VibrationType.cs";
 
-        [MenuItem("Tools/AudioVibrationKit/Vibration Library")]
+        [MenuItem("Tools/AudioVibrationWindow/Vibration Library")]
         private static void OpenWindow()
         {
             GetWindow<VibrationLibraryEditorWindow>().Show();
