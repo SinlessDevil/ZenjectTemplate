@@ -1,5 +1,5 @@
 using System.Collections;
-using Code.Services.SFX;
+using Code.Services.AudioVibrationFX.Sound;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;

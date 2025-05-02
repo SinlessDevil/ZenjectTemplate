@@ -1,5 +1,5 @@
 using System;
-using Code.Services.SFX;
+using Code.Services.AudioVibrationFX.Sound;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;

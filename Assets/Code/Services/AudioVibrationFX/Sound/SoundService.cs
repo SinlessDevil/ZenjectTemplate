@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using Code.Services.AudioVibrationFX.StaticData;
+using Code.Services.PersistenceProgress;
+using Code.Services.SaveLoad;
 using Code.StaticData.AudioVibration;
 using UnityEngine;
 
@@ -8,7 +10,9 @@ namespace Code.Services.AudioVibrationFX.Sound
     public class SoundService : ISoundService
     {
         private readonly IAudioVibrationStaticDataService _audioVibrationStaticDataService;
-
+        private readonly IPersistenceProgressService _persistenceProgressService;
+        private readonly ISaveLoadFacade _saveLoadFacade;
+        
         private readonly List<AudioSource> _2dAudioPool = new();
         private readonly List<AudioSource> _3dAudioPool = new();
 
@@ -20,10 +24,15 @@ namespace Code.Services.AudioVibrationFX.Sound
         private Transform _poolParent3D;
 
         private float _globalVolume = 1f;
-        
-        public SoundService(IAudioVibrationStaticDataService audioVibrationStaticDataService)
+
+        public SoundService(
+            IAudioVibrationStaticDataService audioVibrationStaticDataService, 
+            IPersistenceProgressService persistenceProgressService, 
+            ISaveLoadFacade saveLoadFacade)
         {
             _audioVibrationStaticDataService = audioVibrationStaticDataService;
+            _persistenceProgressService = persistenceProgressService;
+            _saveLoadFacade = saveLoadFacade;
         }
 
         public void Cache2DSounds()
@@ -44,8 +53,17 @@ namespace Code.Services.AudioVibrationFX.Sound
             CreateAudioPool(_3dAudioPool, _poolParent3D, "Audio3D", PoolSize);
         }
 
+        public void SetStateSound(bool enabled)
+        {
+            _persistenceProgressService.PlayerData.PlayerSettings.Sound = enabled;
+            _saveLoadFacade.SaveProgress(SaveMethod.PlayerPrefs);
+        }
+        
         public void PlaySound(Sound2DType type)
         {
+            if(_persistenceProgressService .PlayerData.PlayerSettings.Sound == false)
+                return;
+            
             if (!_cached2DSounds.TryGetValue(type, out var data))
             {
                 Debug.LogWarning($"[SoundService] No sound data found for 2D sound type: {type}");

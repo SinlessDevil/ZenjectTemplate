@@ -10,5 +10,6 @@ namespace Code.Services.AudioVibrationFX.Music
         void Stop();
         void SetVolume(float volume);
         float GetVolume();
+        void SetStateMusic(bool enabled);
     }
 }

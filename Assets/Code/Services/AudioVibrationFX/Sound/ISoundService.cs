@@ -10,5 +10,6 @@ namespace Code.Services.AudioVibrationFX.Sound
         void PlaySound(Sound3DType type, Vector3 position);
         void SetGlobalVolume(float volume);
         float GetGlobalVolume();
+        void SetStateSound(bool enabled);
     }
 }

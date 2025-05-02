@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Code.Services.SFX;
+using Code.Services.AudioVibrationFX.Sound;
 using UnityEngine;
 using Zenject;
 
@@ -79,7 +79,7 @@ namespace Code.UI.Menu.ButtonsNavigation
         
         private void OnOpenedWindow(TypeWindow typeWindow)
         {
-            _soundService.ButtonClick();
+            _soundService.PlaySound(Sound2DType.Click);
             
             SetUpButtonState(typeWindow);
             

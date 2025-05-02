@@ -1,10 +1,11 @@
 using System;
 using Code.Infrastructure.StateMachine;
 using Code.Infrastructure.StateMachine.Game.States;
+using Code.Services.AudioVibrationFX.Music;
+using Code.Services.AudioVibrationFX.Sound;
+using Code.Services.AudioVibrationFX.Vibration;
 using Code.Services.PersistenceProgress;
 using Code.Services.PersistenceProgress.Player;
-using Code.Services.SaveLoad;
-using Code.Services.SFX;
 using Code.Services.StaticData;
 using Code.Services.Timer;
 using DG.Tweening;
@@ -16,6 +17,8 @@ namespace Code.Window.Setting
 {
     public class SettingWindow : MonoBehaviour
     {
+        private const float AnimationDuration = 0.5f;
+        
         [SerializeField] private ToggleContainer _toggleMusic;
         [SerializeField] private ToggleContainer _toggleSound;
         [SerializeField] private ToggleContainer _toggleVibrations;
@@ -27,40 +30,42 @@ namespace Code.Window.Setting
         [Space(10)]
         [SerializeField] private Color _enabledColor;
         [SerializeField] private Color _disabledColor;
-
-        private const float AnimationDuration = 0.5f;
         
         private PlayerSettings _playerSettings;
-
-        private ISaveLoadFacade _saveLoadFacade;
-        private ISoundService _soundService;
+        
         private ITimeService _timeService;
         private IStaticDataService _staticDataService;
         private IStateMachine<IGameState> _gameStateMachine;
+        
+        private IMusicService _musicService;
+        private ISoundService _soundService;
+        private IVibrationService _vibrationService;
 
         [Inject]
         public void Constructor(
             IPersistenceProgressService progressService, 
-            ISaveLoadFacade saveLoadFacade,
-            ISoundService soundService, 
             ITimeService timeService,
             IStaticDataService staticDataService,
-            IStateMachine<IGameState> gameStateMachine)
+            IStateMachine<IGameState> gameStateMachine,
+            ISoundService soundService, 
+            IMusicService musicService,
+            IVibrationService vibrationService)
         {
-            _soundService = soundService;
-            _saveLoadFacade = saveLoadFacade;
             _timeService = timeService;
             _staticDataService = staticDataService;
             _gameStateMachine = gameStateMachine;
+            _soundService = soundService;
+            _musicService = musicService;
+            _vibrationService = vibrationService;
             
             _playerSettings = progressService.PlayerData.PlayerSettings;
         }
 
         private void OnEnable()
         {
-            _toggleMusic.Button.onClick.AddListener(() => UpdateSetting(ref _playerSettings.Music));
-            _toggleSound.Button.onClick.AddListener(() => UpdateSetting(ref _playerSettings.Sound));
-            _toggleVibrations.Button.onClick.AddListener(() => UpdateSetting(ref _playerSettings.Vibration));
+            _toggleMusic.Button.onClick.AddListener(() => UpdateSetting(TypeSFX.Music, _playerSettings.Music));
+            _toggleSound.Button.onClick.AddListener(() => UpdateSetting(TypeSFX.Sound, _playerSettings.Sound));
+            _toggleVibrations.Button.onClick.AddListener(() => UpdateSetting(TypeSFX.Vibration, _playerSettings.Vibration));
             
             _continueButton.onClick.AddListener(OnHideWindow);
             _quitToMenuButton.onClick.AddListener(OnQuitToMenu);
@@ -68,9 +73,9 @@ namespace Code.Window.Setting
         }
         private void OnDisable()
         {
-            _toggleMusic.Button.onClick.RemoveListener(() => UpdateSetting(ref _playerSettings.Music));
-            _toggleSound.Button.onClick.RemoveListener(() => UpdateSetting(ref _playerSettings.Sound));
-            _toggleVibrations.Button.onClick.RemoveListener(() => UpdateSetting(ref _playerSettings.Vibration));
+            _toggleMusic.Button.onClick.RemoveListener(() => UpdateSetting(TypeSFX.Music, _playerSettings.Music));
+            _toggleSound.Button.onClick.RemoveListener(() => UpdateSetting(TypeSFX.Sound, _playerSettings.Sound));
+            _toggleVibrations.Button.onClick.RemoveListener(() => UpdateSetting(TypeSFX.Vibration, _playerSettings.Vibration));
             
             _continueButton.onClick.RemoveListener(OnHideWindow);
             _quitToMenuButton.onClick.RemoveListener(OnQuitToMenu);
@@ -79,7 +84,7 @@ namespace Code.Window.Setting
 
         private void OnHideWindow()
         {
-            _soundService.ButtonClick();
+            _soundService.PlaySound(Sound2DType.Click);
             _timeService.SimpleMode();
             
             Destroy(this.gameObject);
@@ -87,7 +92,7 @@ namespace Code.Window.Setting
         
         private void OnQuitToMenu()
         {
-            _soundService.ButtonClick();
+            _soundService.PlaySound(Sound2DType.Click);
             _timeService.SimpleMode();
             
             _gameStateMachine.Enter<LoadMenuState, string>(_staticDataService.GameConfig.MenuScene);
@@ -95,20 +100,32 @@ namespace Code.Window.Setting
         
         private void OnRestartLevel()
         {
-            _soundService.ButtonClick();
+            _soundService.PlaySound(Sound2DType.Click);
             _timeService.SimpleMode();
             
             _gameStateMachine.Enter<LoadLevelState, string>(_staticDataService.GameConfig.GameScene);
         }
 
-        private void UpdateSetting(ref bool setting)
+        private void UpdateSetting(TypeSFX typeSfx, bool setting)
         {
-            _soundService.ButtonClick();
-            
             setting = !setting;
-            UpdateWindow();
             
-            _saveLoadFacade.SaveProgress(SaveMethod.PlayerPrefs);
+            switch(typeSfx)
+            {
+                case TypeSFX.Sound:
+                    _soundService.SetStateSound(setting);
+                    break;
+                case TypeSFX.Music:
+                    _musicService.SetStateMusic(setting);
+                    break;
+                case TypeSFX.Vibration:
+                    _vibrationService.SetStateVibration(setting);
+                    break;
+            }
+            
+            _soundService.PlaySound(Sound2DType.Click);
+            
+            UpdateWindow();
         }
 
         public void UpdateWindow()
@@ -152,5 +169,13 @@ namespace Code.Window.Setting
     {
         public Button Button;
         public Image Image;
+    }
+
+    [Serializable]
+    public enum TypeSFX
+    {
+        Sound,
+        Music,
+        Vibration
     }
 }

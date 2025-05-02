@@ -1,5 +1,7 @@
 using System.Threading;
 using Code.Services.AudioVibrationFX.StaticData;
+using Code.Services.PersistenceProgress;
+using Code.Services.SaveLoad;
 using Code.StaticData.AudioVibration;
 using Cysharp.Threading.Tasks;
 using MoreMountains.NiceVibrations;
@@ -10,18 +12,34 @@ namespace Code.Services.AudioVibrationFX.Vibration
     public class VibrationService : IVibrationService
     {
         private readonly IAudioVibrationStaticDataService _staticDataService;
+        private readonly IPersistenceProgressService _persistenceProgressService;
+        private readonly ISaveLoadFacade _saveLoadFacade;
 
         private CancellationTokenSource _curveCts;
 
         public bool IsEnabled { get; private set; } = true;
 
-        public VibrationService(IAudioVibrationStaticDataService staticDataService)
+        public VibrationService(
+            IAudioVibrationStaticDataService staticDataService, 
+            IPersistenceProgressService persistenceProgressService, 
+            ISaveLoadFacade saveLoadFacade)
         {
             _staticDataService = staticDataService;
+            _persistenceProgressService = persistenceProgressService;
+            _saveLoadFacade = saveLoadFacade;
         }
 
+        public void SetStateVibration(bool enabled)
+        {
+            _persistenceProgressService.PlayerData.PlayerSettings.Vibration = enabled;
+            _saveLoadFacade.SaveProgress(SaveMethod.PlayerPrefs);
+        }
+        
         public void Play(VibrationType type)
         {
+            if(_persistenceProgressService.PlayerData.PlayerSettings.Vibration == false)
+                return;
+            
             var data = _staticDataService.VibrationsData.Vibrations.Find(v => v.VibrationType == type);
             if (data == null || !IsEnabled)
             {

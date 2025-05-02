@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using Code.Infrastructure.StateMachine;
 using Code.Infrastructure.StateMachine.Game.States;
+using Code.Services.AudioVibrationFX.Sound;
 using Code.Services.Factories.UIFactory;
 using Code.Services.Levels;
 using Code.Services.PersistenceProgress;
 using Code.Services.SaveLoad;
-using Code.Services.SFX;
 using Code.Services.StaticData;
 using Code.StaticData.Levels;
 using DG.Tweening;
@@ -88,7 +88,7 @@ namespace Code.UI.Menu.Windows.Map
 
         private void OnSwipeChapter(TypeSwipe typeSwipe)
         {
-            _soundService.ButtonClick();
+            _soundService.PlaySound(Sound2DType.Click);
             
             switch (typeSwipe)
             {
@@ -194,7 +194,7 @@ namespace Code.UI.Menu.Windows.Map
 
         private void OnLoadLevel(int levelNumber, int chapterId)
         {
-            _soundService.ButtonClick();
+            _soundService.PlaySound(Sound2DType.Click);
             
             _levelService.SetUpCurrentLevel(levelNumber, chapterId);
             _saveLoadFacade.SaveProgress(SaveMethod.PlayerPrefs);

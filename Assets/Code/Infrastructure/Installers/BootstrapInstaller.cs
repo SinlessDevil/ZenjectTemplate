@@ -1,6 +1,10 @@
 using Code.Infrastructure.StateMachine;
 using Code.Infrastructure.StateMachine.Game;
 using Code.Infrastructure.StateMachine.Game.States;
+using Code.Services.AudioVibrationFX.Music;
+using Code.Services.AudioVibrationFX.Sound;
+using Code.Services.AudioVibrationFX.StaticData;
+using Code.Services.AudioVibrationFX.Vibration;
 using Code.Services.Factories.Game;
 using Code.Services.Factories.UIFactory;
 using Code.Services.Finish;
@@ -13,7 +17,6 @@ using Code.Services.PersistenceProgress;
 using Code.Services.Providers.Widgets;
 using Code.Services.Random;
 using Code.Services.SaveLoad;
-using Code.Services.SFX;
 using Code.Services.StaticData;
 using Code.Services.Storage;
 using Code.Services.Timer;
@@ -28,8 +31,6 @@ namespace Code.Infrastructure.Installers
     {
         [SerializeField] private CoroutineRunner _coroutineRunner;
         [SerializeField] private LoadingCurtain _curtain;
-        [SerializeField] private SoundService _soundService;
-        [SerializeField] private MusicService _musicService;
         
         private RuntimePlatform Platform => Application.platform;
 
@@ -49,8 +50,6 @@ namespace Code.Infrastructure.Installers
         {
             Container.Bind<ICoroutineRunner>().FromMethod(() => Container.InstantiatePrefabForComponent<ICoroutineRunner>(_coroutineRunner)).AsSingle();
             Container.Bind<ILoadingCurtain>().FromMethod(() => Container.InstantiatePrefabForComponent<ILoadingCurtain>(_curtain)).AsSingle();
-            Container.Bind<ISoundService>().FromMethod(() => Container.InstantiatePrefabForComponent<ISoundService>(_soundService)).AsSingle();
-            Container.Bind<IMusicService>().FromMethod(() => Container.InstantiatePrefabForComponent<IMusicService>(_musicService)).AsSingle();
             
             BindSceneLoader();
         }
@@ -63,19 +62,44 @@ namespace Code.Infrastructure.Installers
             Container.BindInterfacesTo<GameFactory>().AsSingle();
             Container.BindInterfacesTo<WindowService>().AsSingle();
             Container.BindInterfacesTo<InputService>().AsSingle();
-            Container.BindInterfacesTo<PersistenceProgressService>().AsSingle();
             Container.BindInterfacesTo<RandomService>().AsSingle();
             Container.BindInterfacesTo<UnifiedSaveLoadFacade>().AsSingle();
             Container.BindInterfacesTo<WidgetProvider>().AsSingle();
             Container.BindInterfacesTo<LevelService>().AsSingle();
+            Container.BindInterfacesTo<StorageService>().AsSingle();
+            Container.BindInterfacesTo<TimeService>().AsSingle();
+
+            BindDataServices();
+            BindAudioVibrationService();
+            BindFinishService();
+        }
+
+        private void BindAudioVibrationService()
+        {
+            Container.BindInterfacesTo<SoundService>().AsSingle();
+            Container.BindInterfacesTo<MusicService>().AsSingle();
+            Container.BindInterfacesTo<VibrationService>().AsSingle();
+            
+            Container.Resolve<ISoundService>().Cache2DSounds();
+            Container.Resolve<ISoundService>().CreateSoundsPool();
+            
+            Container.Resolve<IMusicService>().CacheMusic();
+            Container.Resolve<IMusicService>().CreateMusicRoot();
+        }
+        
+        private void BindDataServices()
+        {
+            Container.BindInterfacesTo<PersistenceProgressService>().AsSingle();
+            Container.BindInterfacesTo<LevelLocalProgressService>().AsSingle();
+        }
+
+        private void BindFinishService()
+        {
             Container.BindInterfacesTo<FinishService>().AsSingle();
             Container.BindInterfacesTo<WinService>().AsSingle();
             Container.BindInterfacesTo<LoseService>().AsSingle();
-            Container.BindInterfacesTo<LevelLocalProgressService>().AsSingle();
-            Container.BindInterfacesTo<StorageService>().AsSingle();
-            Container.BindInterfacesTo<TimeService>().AsSingle();
         }
-
+        
         private void BindGameStateMachine()
         {
             Container.Bind<GameStateFactory>().AsSingle();
@@ -97,6 +121,10 @@ namespace Code.Infrastructure.Installers
             IStaticDataService staticDataService = new StaticDataService();
             staticDataService.LoadData();
             Container.Bind<IStaticDataService>().FromInstance(staticDataService).AsSingle();
+            
+            IAudioVibrationStaticDataService audioVibrationStaticDataService = new AudioVibrationStaticDataService();
+            audioVibrationStaticDataService.LoadData();
+            Container.Bind<IAudioVibrationStaticDataService>().FromInstance(audioVibrationStaticDataService).AsSingle();
         }
         
         private void BindGameStates()

@@ -5,5 +5,6 @@ namespace Code.Services.AudioVibrationFX.Vibration
         void Play(VibrationType type);
         void Stop();
         bool IsEnabled { get; }
+        void SetStateVibration(bool enabled);
     }
 }
