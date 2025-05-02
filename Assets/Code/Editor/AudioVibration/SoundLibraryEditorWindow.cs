@@ -14,7 +14,7 @@ namespace Code.Editor.AudioVibration
 {
     public class SoundLibraryEditorWindow : OdinEditorWindow
     {
-        [MenuItem("Tools/AudioVibrationKit/Sound Library")]
+        [MenuItem("Tools/AudioVibrationWindow/Sound Library")]
         private static void OpenWindow()
         {
             GetWindow<SoundLibraryEditorWindow>().Show();
