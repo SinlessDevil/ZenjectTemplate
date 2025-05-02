@@ -1,4 +1,4 @@
-namespace Code.Editor
+namespace Code.Editor.Save
 {
     [System.Serializable]
     public class JsonWrapper

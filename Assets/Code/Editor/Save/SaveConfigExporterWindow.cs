@@ -3,13 +3,13 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using UnityEditor;
-using UnityEngine;
 using Sirenix.OdinInspector;
 using Sirenix.OdinInspector.Editor;
 using Sirenix.Utilities.Editor;
+using UnityEditor;
+using UnityEngine;
 
-namespace Code.Editor
+namespace Code.Editor.Save
 {
     public class SaveConfigExporterWindow : OdinEditorWindow
     {

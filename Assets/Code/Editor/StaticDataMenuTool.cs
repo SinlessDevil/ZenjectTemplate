@@ -1,7 +1,7 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-namespace Code.Infrastructure.Editor
+namespace Code.Editor
 {
     public static class StaticDataMenuTool
     {

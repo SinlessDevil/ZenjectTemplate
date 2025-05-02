@@ -2,7 +2,7 @@
 using UnityEditor.SceneManagement;
 using UnityEngine;
 
-namespace Code.Infrastructure.Editor
+namespace Code.Editor
 {
     public class InfrastructureMenuItem
     {

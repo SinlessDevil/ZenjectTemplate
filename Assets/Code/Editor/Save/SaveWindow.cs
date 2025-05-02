@@ -9,7 +9,7 @@ using Sirenix.Utilities.Editor;
 using UnityEditor;
 using UnityEngine;
 
-namespace Code.Editor
+namespace Code.Editor.Save
 {
     public class SaveWindow : OdinEditorWindow
     {
