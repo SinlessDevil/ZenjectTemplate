@@ -14,7 +14,6 @@ namespace Code.Editor
             var gameRunnerPrefab = Resources.Load(GameRunnerPath);
             var root = PrefabUtility.InstantiatePrefab(gameRunnerPrefab) as GameObject;
             Selection.activeGameObject = root;
-
             EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
         }
     }
