@@ -16,7 +16,7 @@ namespace Code.Editor.AudioVibration
         private const string VIBRATION_DATA_PATH = "StaticData/Vibration/VibrationsData";
         private const string ENUM_OUTPUT_PATH = "Assets/Code/Services/AudioVibrationFX/Vibration/VibrationType.cs";
 
-        [MenuItem("Tools/AudioVibrationWindow/Vibration Library")]
+        [MenuItem("Tools/Audio Vibration Window/Vibration Library", false, 2002)]
         private static void OpenWindow()
         {
             GetWindow<VibrationLibraryEditorWindow>().Show();
@@ -71,7 +71,7 @@ namespace Code.Editor.AudioVibration
             }
             else
             {
-                Debug.LogError($"❌ VibrationsData not found at Resources/{VIBRATION_DATA_PATH}.asset");
+                Debug.LogError($"VibrationsData not found at Resources/{VIBRATION_DATA_PATH}.asset");
                 _editableVibrations = new List<VibrationData>();
             }
         }

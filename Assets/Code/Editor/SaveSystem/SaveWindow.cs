@@ -38,7 +38,7 @@ namespace Code.Editor.Save
         private bool showJson = true;
         private bool showXml = true;
 
-        [MenuItem("Tools/Save Window/All Saves Window")]
+        [MenuItem("Tools/Save Window/All Saves Window", false, 2001)]
         private static void OpenWindow()
         {
             var window = GetWindow<SaveWindow>();

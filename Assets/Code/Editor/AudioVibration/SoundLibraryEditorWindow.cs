@@ -14,7 +14,7 @@ namespace Code.Editor.AudioVibration
 {
     public class SoundLibraryEditorWindow : OdinEditorWindow
     {
-        [MenuItem("Tools/AudioVibrationWindow/Sound Library")]
+        [MenuItem("Tools/Audio Vibration Window/Sound Library", false, 2002)]
         private static void OpenWindow()
         {
             GetWindow<SoundLibraryEditorWindow>().Show();
@@ -178,7 +178,7 @@ namespace Code.Editor.AudioVibration
             }
             else
             {
-                Debug.LogError("❌ SoundsData asset not found at Resources/StaticData/Sounds/Sounds.asset");
+                Debug.LogError("SoundsData asset not found at Resources/StaticData/Sounds/Sounds.asset");
                 _sounds2DDataEditable = new List<SoundData>();
                 _sounds3DDataEditable = new List<Sound3DData>();
                 _musicDataEditable = new List<SoundData>();

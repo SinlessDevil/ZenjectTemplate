@@ -30,7 +30,7 @@ namespace Code.Editor.Save
         private string GenerateJsonPath() =>
             _targetAsset != null ? Path.Combine(SaveFolderPath, $"{_targetAsset.name}_{DateTime.Now:yyyyMMdd_HHmmss}.json") : null;
 
-        [MenuItem("Tools/Save Window/Save Config Exporter Window")]
+        [MenuItem("Tools/Save Window/Save Config Exporter Window", false, 2001)]
         private static void OpenWindow()
         {
             var window = GetWindow<SaveConfigExporterWindow>();
