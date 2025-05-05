@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
 using Sirenix.OdinInspector;
 using Sirenix.OdinInspector.Editor;
 using UnityEditor;
@@ -14,8 +13,6 @@ namespace Code.Editor.Tests
 {
     public class TestsToolWindow : OdinEditorWindow
     {
-        private const string IgnoreText = "[Ignore(\"Disabled via TestsToolWindow\")]";
-
         [MenuItem("Tools/Tests Tool Window", false, 2000)]
         private static void OpenWindow()
         {
@@ -64,7 +61,8 @@ namespace Code.Editor.Tests
         [Button("📋 Open Test Runner", ButtonSizes.Large), GUIColor(0.8f, 0.8f, 1f)]
         private void OpenTestRunner()
         {
-            var testRunnerType = Type.GetType("UnityEditor.TestTools.TestRunner.TestRunnerWindow,UnityEditor.TestRunner");
+            var testRunnerType =
+                Type.GetType("UnityEditor.TestTools.TestRunner.TestRunnerWindow,UnityEditor.TestRunner");
             if (testRunnerType != null)
             {
                 GetWindow(testRunnerType, false, "Test Runner");
@@ -74,7 +72,7 @@ namespace Code.Editor.Tests
                 Debug.LogWarning("Test Runner Window not found. Make sure 'Test Framework' package is installed.");
             }
         }
-        
+
         private void AddIgnoreAttributes(IEnumerable<TestCaseConfig> tests)
         {
             var testsByFile = new Dictionary<string, List<string>>();
@@ -86,7 +84,7 @@ namespace Code.Editor.Tests
 
                 foreach (var file in files)
                 {
-                    if (File.ReadAllText(file).Contains($"void {methodName}("))
+                    if (File.ReadAllText(file).Contains($" {methodName}("))
                     {
                         if (!testsByFile.ContainsKey(file))
                             testsByFile[file] = new List<string>();
@@ -104,16 +102,47 @@ namespace Code.Editor.Tests
                 var lines = File.ReadAllLines(file).ToList();
                 bool modified = false;
 
-                for (int i = 0; i < lines.Count - 1; i++)
+                for (int i = 0; i < lines.Count; i++)
                 {
                     foreach (var methodName in methodNames)
                     {
-                        if (lines[i].Trim() == "[Test]" &&
-                            lines[i + 1].Contains($"void {methodName}("))
+                        if (lines[i].Contains($" {methodName}("))
                         {
-                            lines[i] = "        [Test, Ignore(\"Disabled via TestsToolWindow\")]";
-                            modified = true;
-                            Debug.Log($"[TestsTool] Добавлен Ignore в метод: {methodName}");
+                            // Назад ищем, где начался блок атрибутов
+                            int attrStart = i - 1;
+                            while (attrStart >= 0 && lines[attrStart].Trim().StartsWith("["))
+                            {
+                                attrStart--;
+                            }
+
+                            attrStart++;
+                            
+                            bool alreadyHasIgnore = false;
+                            for (int j = attrStart; j < i; j++)
+                            {
+                                if (lines[j].Contains("Ignore("))
+                                {
+                                    alreadyHasIgnore = true;
+                                    break;
+                                }
+                            }
+
+                            if (alreadyHasIgnore)
+                                continue;
+                            
+                            for (int j = attrStart; j < i; j++)
+                            {
+                                if (lines[j].Contains("[Test") || lines[j].Contains("[UnityTest"))
+                                {
+                                    if (lines[j].Contains("]"))
+                                    {
+                                        lines[j] = lines[j].Replace("]", ", Ignore(\"Disabled via TestsToolWindow\")]");
+                                        modified = true;
+                                        Debug.Log($"[TestsTool] Добавлен Ignore в метод: {methodName}");
+                                        break;
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -138,7 +167,7 @@ namespace Code.Editor.Tests
 
                 foreach (var file in files)
                 {
-                    if (File.ReadAllText(file).Contains($"void {methodName}("))
+                    if (File.ReadAllText(file).Contains($" {methodName}("))
                     {
                         if (!testsByFile.ContainsKey(file))
                             testsByFile[file] = new List<string>();
@@ -156,16 +185,29 @@ namespace Code.Editor.Tests
                 var lines = File.ReadAllLines(file).ToList();
                 bool modified = false;
 
-                for (int i = 0; i < lines.Count - 1; i++)
+                for (int i = 0; i < lines.Count; i++)
                 {
                     foreach (var methodName in methodNames)
                     {
-                        if (lines[i].Trim().StartsWith("[Test, Ignore(\"Disabled via TestsToolWindow\")") &&
-                            lines[i + 1].Contains($"void {methodName}("))
+                        if (lines[i].Contains($" {methodName}("))
                         {
-                            lines[i] = "        [Test]";
-                            modified = true;
-                            Debug.Log($"[TestsTool] Удалён Ignore из метода: {methodName}");
+                            int attrStart = i - 1;
+                            while (attrStart >= 0 && lines[attrStart].Trim().StartsWith("["))
+                            {
+                                attrStart--;
+                            }
+
+                            attrStart++;
+
+                            for (int j = attrStart; j < i; j++)
+                            {
+                                if (lines[j].Contains("Ignore(\"Disabled via TestsToolWindow\")"))
+                                {
+                                    lines[j] = lines[j].Replace(", Ignore(\"Disabled via TestsToolWindow\")", "");
+                                    modified = true;
+                                    Debug.Log($"[TestsTool] Удалён Ignore из метода: {methodName}");
+                                }
+                            }
                         }
                     }
                 }
@@ -178,6 +220,7 @@ namespace Code.Editor.Tests
 
             AssetDatabase.Refresh();
         }
+
 
         private void CollectTestsRecursive(ITestAdaptor adaptor, TestPlatform platform)
         {
@@ -209,10 +252,12 @@ namespace Code.Editor.Tests
     {
         [TableColumnWidth(250, Resizable = true)] [ReadOnly]
         public string FullName;
-        
+
         [GUIColor(0.2f, 0.8f, 0.2f)]
         [BoxGroup("Enabled", showLabel: false)]
-        [TableColumnWidth(150, Resizable = false)] [ShowInInspector] [field: SerializeField]
+        [TableColumnWidth(150, Resizable = false)]
+        [ShowInInspector]
+        [field: SerializeField]
         public bool Enabled
         {
             get => _enabled;
@@ -228,7 +273,8 @@ namespace Code.Editor.Tests
 
         [GUIColor(1f, 0f, 0)]
         [BoxGroup("IsChanged", showLabel: false)]
-        [TableColumnWidth(150, Resizable = false)] [ShowInInspector, ReadOnly, ShowIf(nameof(IsChanged))]
+        [TableColumnWidth(150, Resizable = false)]
+        [ShowInInspector, ReadOnly, ShowIf(nameof(IsChanged))]
         public bool IsChanged = false;
 
         private bool _enabled;
@@ -243,7 +289,7 @@ namespace Code.Editor.Tests
     [Serializable]
     public class GroupedTestGroup
     {
-        [TableColumnWidth(175, Resizable = false)] [ReadOnly] 
+        [TableColumnWidth(175, Resizable = false)] [ReadOnly]
         public string AssemblyName;
 
         [TableList] public List<TestCaseConfig> Tests = new();
