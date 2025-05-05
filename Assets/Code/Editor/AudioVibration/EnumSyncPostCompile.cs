@@ -19,20 +19,12 @@ namespace Code.Editor.AudioVibration
                 soundWindow.UpdateSoundTypesAfterReload();
                 Debug.Log("✅ SoundTypes synced!");
             }
-            else
-            {
-                Debug.LogWarning("⚠️ SoundLibraryEditorWindow not open. Skipping SoundTypes sync.");
-            }
 
             var vibrationWindow = Resources.FindObjectsOfTypeAll<VibrationLibraryEditorWindow>().FirstOrDefault();
             if (vibrationWindow != null)
             {
                 vibrationWindow.UpdateVibrationTypesAfterReload();
                 Debug.Log("✅ VibrationTypes synced!");
-            }
-            else
-            {
-                Debug.LogWarning("⚠️ VibrationLibraryEditorWindow not open. Skipping VibrationTypes sync.");
             }
         }
     }

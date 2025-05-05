@@ -9,12 +9,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1ab372d6a005c8344b5d6b25dbc310ce, type: 3}
-  m_Name: ZenjectReflectionBakingSettings
+  m_Script: {fileID: 11500000, guid: c6343eae76b641f6a5b3b52280b1061b, type: 3}
+  m_Name: CIConfig
   m_EditorClassIdentifier: 
-  _isEnabledInBuilds: 1
-  _isEnabledInEditor: 0
-  _allGeneratedAssemblies: 1
-  _includeAssemblies: []
-  _excludeAssemblies: []
-  _namespacePatterns: []
+  IsAndroidBuild: 1
+  IsIosBuild: 0
+  Version: 1.0.0
+  UseCustomKeystore: 0
+  KeystoreName: 
+  KeystorePass: 
+  KeyaliasName: 
+  KeyaliasPass: 
+  UseAutomaticSigning: 1
+  AppleDeveloperTeamID: 

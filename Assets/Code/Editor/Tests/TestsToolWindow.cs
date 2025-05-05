@@ -220,7 +220,6 @@ namespace Code.Editor.Tests
             AssetDatabase.Refresh();
         }
 
-
         private void CollectTestsRecursive(ITestAdaptor adaptor, TestPlatform platform)
         {
             if (!adaptor.HasChildren && !string.IsNullOrEmpty(adaptor.FullName))
