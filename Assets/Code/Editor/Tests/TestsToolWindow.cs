@@ -108,7 +108,6 @@ namespace Code.Editor.Tests
                     {
                         if (lines[i].Contains($" {methodName}("))
                         {
-                            // Назад ищем, где начался блок атрибутов
                             int attrStart = i - 1;
                             while (attrStart >= 0 && lines[attrStart].Trim().StartsWith("["))
                             {
@@ -138,7 +137,7 @@ namespace Code.Editor.Tests
                                     {
                                         lines[j] = lines[j].Replace("]", ", Ignore(\"Disabled via TestsToolWindow\")]");
                                         modified = true;
-                                        Debug.Log($"[TestsTool] Добавлен Ignore в метод: {methodName}");
+                                        Debug.Log($"[TestsTool] Added Ignore in method: {methodName}");
                                         break;
                                     }
                                 }
@@ -205,7 +204,7 @@ namespace Code.Editor.Tests
                                 {
                                     lines[j] = lines[j].Replace(", Ignore(\"Disabled via TestsToolWindow\")", "");
                                     modified = true;
-                                    Debug.Log($"[TestsTool] Удалён Ignore из метода: {methodName}");
+                                    Debug.Log($"[TestsTool] Deletes Ignore fot method: {methodName}");
                                 }
                             }
                         }

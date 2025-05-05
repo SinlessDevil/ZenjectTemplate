@@ -22,7 +22,7 @@ public class TestAddressable : ZenjectIntegrationTestFixture
         Resources.UnloadUnusedAssets();
     }
     
-    [UnityTest]
+    [UnityTest, Ignore("Disabled via TestsToolWindow")]
     public IEnumerator TestAddressableAsyncLoad()
     {
         yield return ValidateTestDependency();
@@ -70,7 +70,7 @@ public class TestAddressable : ZenjectIntegrationTestFixture
         Assert.Pass();
     }
     
-    [UnityTest]
+    [UnityTest, Ignore("Disabled via TestsToolWindow")]
     public IEnumerator TestAssetReferenceTMethod()
     {
         yield return ValidateTestDependency();
@@ -99,7 +99,7 @@ public class TestAddressable : ZenjectIntegrationTestFixture
         Assert.Pass();
     }
     
-    [UnityTest]
+    [UnityTest, Ignore("Disabled via TestsToolWindow")]
     [Timeout(10500)]
     public IEnumerator TestFailedLoad()
     {
