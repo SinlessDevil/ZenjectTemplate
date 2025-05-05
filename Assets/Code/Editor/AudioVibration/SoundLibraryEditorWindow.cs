@@ -14,6 +14,12 @@ namespace Code.Editor.AudioVibration
 {
     public class SoundLibraryEditorWindow : OdinEditorWindow
     {
+        private const string Sound2DPath = "Assets/Code/Services/AudioVibrationFX/Sound/Sound2DType.cs";
+        private const string Sound3DPath = "Assets/Code/Services/AudioVibrationFX/Sound/Sound3DType.cs";
+        private const string MusicPath   = "Assets/Code/Services/AudioVibrationFX/Music/MusicType.cs";
+        private const string SoundsDataResourcePath = "StaticData/Sounds/Sounds";
+
+        
         [MenuItem("Tools/Audio Vibration Window/Sound Library", false, 2002)]
         private static void OpenWindow()
         {
@@ -72,31 +78,28 @@ namespace Code.Editor.AudioVibration
         [GUIColor(0f, 1f, 0f)]
         private void GenerateEnums()
         {
-            GenerateSound2DEnumFile("Sound2DType.cs", "Sound2DType", _sounds2DDataEditable);
-            GenerateSound3DEnumFile("Sound3DType.cs", "Sound3DType", _sounds3DDataEditable);
-            GenerateMusicEnumFile("MusicType.cs", "MusicType", _musicDataEditable);
+            GenerateSound2DEnumFile("Sound2DType", _sounds2DDataEditable);
+            GenerateSound3DEnumFile("Sound3DType", _sounds3DDataEditable);
+            GenerateMusicEnumFile("MusicType", _musicDataEditable);
             SaveSoundsData();
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
         }
         
-        private void GenerateSound2DEnumFile(string fileName, string enumName, List<SoundData> soundList)
+        private void GenerateSound2DEnumFile(string enumName, List<SoundData> soundList)
         {
-            var enumPath = $"Assets/Code/Services/AudioVibrationFX/Sound/{fileName}";
-            GenerateEnumFileBase(enumPath, enumName, "Sound" ,soundList, TypeSound.Sound2D);
+            GenerateEnumFileBase(Sound2DPath, enumName, "Sound" ,soundList, TypeSound.Sound2D);
         }
 
-        private void GenerateSound3DEnumFile(string fileName, string enumName, List<Sound3DData> soundList)
+        private void GenerateSound3DEnumFile(string enumName, List<Sound3DData> soundList)
         {
-            var enumPath = $"Assets/Code/Services/AudioVibrationFX/Sound/{fileName}";
             List<SoundData> baseList = soundList.Cast<SoundData>().ToList();
-            GenerateEnumFileBase(enumPath, enumName, "Sound" ,baseList, TypeSound.Sound3D);
+            GenerateEnumFileBase(Sound3DPath, enumName, "Sound" ,baseList, TypeSound.Sound3D);
         }
         
-        private void GenerateMusicEnumFile(string fileName, string enumName, List<SoundData> soundList)
+        private void GenerateMusicEnumFile(string enumName, List<SoundData> soundList)
         {
-            var enumPath = $"Assets/Code/Services/AudioVibrationFX/Music/{fileName}";
-            GenerateEnumFileBase(enumPath, enumName, "Music",soundList, TypeSound.Music);
+            GenerateEnumFileBase(MusicPath, enumName, "Music",soundList, TypeSound.Music);
         }
         
         private void GenerateEnumFileBase(string enumPath, string enumName, string nameFolder, 
@@ -167,7 +170,7 @@ namespace Code.Editor.AudioVibration
         {
             base.OnEnable();
 
-            var loaded = Resources.Load<SoundsData>("StaticData/Sounds/Sounds");
+            var loaded = Resources.Load<SoundsData>(SoundsDataResourcePath);
 
             if (loaded != null)
             {
@@ -206,28 +209,13 @@ namespace Code.Editor.AudioVibration
         private void UpdateSoundTypes()
         {
             foreach (var sound in _sounds2DDataEditable)
-            {
-                if (Enum.TryParse(sound.Name, out Sound2DType parsedType))
-                    sound.Sound2DType = parsedType;
-                else
-                    sound.Sound2DType = Sound2DType.Unknown;
-            }
+                sound.Sound2DType = Enum.TryParse(sound.Name, out Sound2DType parsedType) ? parsedType : Sound2DType.Unknown;
 
             foreach (var sound in _sounds3DDataEditable)
-            {
-                if (Enum.TryParse(sound.Name, out Sound3DType parsedType))
-                    sound.Sound3DType = parsedType;
-                else
-                    sound.Sound3DType = Sound3DType.Unknown;
-            }
+                sound.Sound3DType = Enum.TryParse(sound.Name, out Sound3DType parsedType) ? parsedType : Sound3DType.Unknown;
 
             foreach (var music in _musicDataEditable)
-            {
-                if (Enum.TryParse(music.Name, out MusicType parsedType))
-                    music.MusicType = parsedType;
-                else
-                    music.MusicType = MusicType.Unknown;
-            }
+                music.MusicType = Enum.TryParse(music.Name, out MusicType parsedType) ? parsedType : MusicType.Unknown;
             
             EditorUtility.SetDirty(_soundsData);
             AssetDatabase.SaveAssets();

@@ -13,8 +13,8 @@ namespace Code.Editor.AudioVibration
 {
     public class VibrationLibraryEditorWindow : OdinEditorWindow
     {
-        private const string VIBRATION_DATA_PATH = "StaticData/Vibration/VibrationsData";
-        private const string ENUM_OUTPUT_PATH = "Assets/Code/Services/AudioVibrationFX/Vibration/VibrationType.cs";
+        private const string VibrationDataPath = "StaticData/Vibration/VibrationsData";
+        private const string EnumOutPutPath = "Assets/Code/Services/AudioVibrationFX/Vibration/VibrationType.cs";
 
         [MenuItem("Tools/Audio Vibration Window/Vibration Library", false, 2002)]
         private static void OpenWindow()
@@ -50,7 +50,7 @@ namespace Code.Editor.AudioVibration
                 return;
             }
 
-            GenerateEnumFile(ENUM_OUTPUT_PATH, "VibrationType", _editableVibrations);
+            GenerateEnumFile(EnumOutPutPath, "VibrationType", _editableVibrations);
             AssignEnumTypes(_editableVibrations);
             SaveData();
             AssetDatabase.SaveAssets();
@@ -62,7 +62,7 @@ namespace Code.Editor.AudioVibration
         {
             base.OnEnable();
 
-            _vibrationsData = Resources.Load<VibrationsData>(VIBRATION_DATA_PATH);
+            _vibrationsData = Resources.Load<VibrationsData>(VibrationDataPath);
 
             if (_vibrationsData != null)
             {
@@ -71,7 +71,7 @@ namespace Code.Editor.AudioVibration
             }
             else
             {
-                Debug.LogError($"VibrationsData not found at Resources/{VIBRATION_DATA_PATH}.asset");
+                Debug.LogError($"VibrationsData not found at Resources/{VibrationDataPath}.asset");
                 _editableVibrations = new List<VibrationData>();
             }
         }

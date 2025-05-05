@@ -67,7 +67,7 @@ namespace Code.Editor.Tests
             var testRunnerType = Type.GetType("UnityEditor.TestTools.TestRunner.TestRunnerWindow,UnityEditor.TestRunner");
             if (testRunnerType != null)
             {
-                EditorWindow.GetWindow(testRunnerType, false, "Test Runner");
+                GetWindow(testRunnerType, false, "Test Runner");
             }
             else
             {
@@ -87,10 +87,10 @@ namespace Code.Editor.Tests
                     var content = File.ReadAllText(file);
                     var methodPattern = $@"^(\s*)\[Test\]\s*(public\s+void\s+{methodName}\s*\(\))";
                     var match = Regex.Match(content, methodPattern, RegexOptions.Multiline);
-                    if (!match.Success || content.Contains(IgnoreText)) continue;
+                    if (!match.Success || content.Contains(IgnoreText)) 
+                        continue;
 
                     var indent = match.Groups[1].Value;
-                    
 
                     Debug.Log($"[TestsTool] Added [Ignore] in Method: {test.FullName}");
 
@@ -161,7 +161,6 @@ namespace Code.Editor.Tests
     {
         [TableColumnWidth(250, Resizable = true)] [ReadOnly]
         public string FullName;
-        
         
         [GUIColor(0.2f, 0.8f, 0.2f)]
         [BoxGroup("Enabled", showLabel: false)]
