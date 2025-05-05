@@ -77,6 +77,8 @@ namespace Code.Editor.Tests
         
         private void AddIgnoreAttributes(IEnumerable<TestCaseConfig> tests)
         {
+            var testsByFile = new Dictionary<string, List<string>>();
+
             foreach (var test in tests)
             {
                 var methodName = test.FullName.Split('.').Last();
@@ -84,21 +86,41 @@ namespace Code.Editor.Tests
 
                 foreach (var file in files)
                 {
-                    var content = File.ReadAllText(file);
-                    var methodPattern = $@"^(\s*)\[Test\]\s*(public\s+void\s+{methodName}\s*\(\))";
-                    var match = Regex.Match(content, methodPattern, RegexOptions.Multiline);
-                    if (!match.Success || content.Contains(IgnoreText)) 
-                        continue;
+                    if (File.ReadAllText(file).Contains($"void {methodName}("))
+                    {
+                        if (!testsByFile.ContainsKey(file))
+                            testsByFile[file] = new List<string>();
 
-                    var indent = match.Groups[1].Value;
+                        testsByFile[file].Add(methodName);
+                        break;
+                    }
+                }
+            }
 
-                    Debug.Log($"[TestsTool] Added [Ignore] in Method: {test.FullName}");
+            foreach (var kvp in testsByFile)
+            {
+                var file = kvp.Key;
+                var methodNames = kvp.Value;
+                var lines = File.ReadAllLines(file).ToList();
+                bool modified = false;
 
-                    var updated = Regex.Replace(content, methodPattern,
-                        $"{indent}[Test]\n{indent}[Ignore(\"Disabled via TestsToolWindow\")]\n{indent}$2",
-                        RegexOptions.Multiline);
-                    File.WriteAllText(file, updated);
-                    break;
+                for (int i = 0; i < lines.Count - 1; i++)
+                {
+                    foreach (var methodName in methodNames)
+                    {
+                        if (lines[i].Trim() == "[Test]" &&
+                            lines[i + 1].Contains($"void {methodName}("))
+                        {
+                            lines[i] = "        [Test, Ignore(\"Disabled via TestsToolWindow\")]";
+                            modified = true;
+                            Debug.Log($"[TestsTool] Добавлен Ignore в метод: {methodName}");
+                        }
+                    }
+                }
+
+                if (modified)
+                {
+                    File.WriteAllLines(file, lines);
                 }
             }
 
@@ -107,6 +129,8 @@ namespace Code.Editor.Tests
 
         private void RemoveIgnoreAttributes(IEnumerable<TestCaseConfig> tests)
         {
+            var testsByFile = new Dictionary<string, List<string>>();
+
             foreach (var test in tests)
             {
                 var methodName = test.FullName.Split('.').Last();
@@ -114,17 +138,41 @@ namespace Code.Editor.Tests
 
                 foreach (var file in files)
                 {
-                    var content = File.ReadAllText(file);
+                    if (File.ReadAllText(file).Contains($"void {methodName}("))
+                    {
+                        if (!testsByFile.ContainsKey(file))
+                            testsByFile[file] = new List<string>();
 
-                    if (!content.Contains(methodName) || !content.Contains(IgnoreText))
-                        continue;
+                        testsByFile[file].Add(methodName);
+                        break;
+                    }
+                }
+            }
 
-                    Debug.Log($"[TestsTool] Удаляю [Ignore] из метода: {test.FullName}");
+            foreach (var kvp in testsByFile)
+            {
+                var file = kvp.Key;
+                var methodNames = kvp.Value;
+                var lines = File.ReadAllLines(file).ToList();
+                bool modified = false;
 
-                    var ignorePattern = $@"^\s*\[Ignore\(""Disabled via TestsToolWindow""\)\]\s*\n";
-                    var updated = Regex.Replace(content, ignorePattern, "", RegexOptions.Multiline);
-                    File.WriteAllText(file, updated);
-                    break;
+                for (int i = 0; i < lines.Count - 1; i++)
+                {
+                    foreach (var methodName in methodNames)
+                    {
+                        if (lines[i].Trim().StartsWith("[Test, Ignore(\"Disabled via TestsToolWindow\")") &&
+                            lines[i + 1].Contains($"void {methodName}("))
+                        {
+                            lines[i] = "        [Test]";
+                            modified = true;
+                            Debug.Log($"[TestsTool] Удалён Ignore из метода: {methodName}");
+                        }
+                    }
+                }
+
+                if (modified)
+                {
+                    File.WriteAllLines(file, lines);
                 }
             }
 
