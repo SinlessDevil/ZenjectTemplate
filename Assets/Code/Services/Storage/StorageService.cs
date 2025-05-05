@@ -39,7 +39,7 @@ namespace Code.Services.Storage
         public void SubstractCurrency(CurrencyType currencyType, int value)
         {
             Currency currency = GetCurrency(currencyType);
-            currency.Value = Mathf.Min(currency.Value - value, 0);
+            currency.Value = Mathf.Max(currency.Value - value, 0);
             _saveLoadFacade.SaveProgress(SaveMethod.PlayerPrefs);
             ChangedCurrencyEvent?.Invoke(currency);
         }
@@ -47,7 +47,7 @@ namespace Code.Services.Storage
         public void SubstractCurrency(Currency currency)
         {
             Currency targetCurrency = GetCurrency(currency.CurrencyType);
-            targetCurrency.Value = Mathf.Min(currency.Value - currency.Value, 0);
+            targetCurrency.Value = Mathf.Max(targetCurrency.Value - currency.Value, 0);
             _saveLoadFacade.SaveProgress(SaveMethod.PlayerPrefs);
             ChangedCurrencyEvent?.Invoke(currency);
         }

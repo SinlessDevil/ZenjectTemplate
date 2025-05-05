@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Code.Services.Levels;
 using Code.Services.PersistenceProgress;
 using Code.Services.PersistenceProgress.Player;
 using Code.Services.StaticData;
@@ -8,7 +9,7 @@ using NSubstitute;
 using NUnit.Framework;
 using UnityEngine;
 
-namespace Code.Services.Levels
+namespace Tests.EditMode
 {
     public class LevelServiceTests
     {
