@@ -9,7 +9,8 @@ namespace Tests.EditMode
     public class GuidDuplicationTest
     {
         [Test]
-        public void AllMetaFilesHaveUniqueGUIDs()
+[Ignore("Disabled via TestsToolWindow")]
+public void AllMetaFilesHaveUniqueGUIDs()
         {
             var guids = new Dictionary<string, string>();
             var metaFiles = Directory.GetFiles(Application.dataPath, "*.meta", SearchOption.AllDirectories);

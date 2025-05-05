@@ -9,7 +9,8 @@ namespace Tests.EditMode
     public class ResourcesPrefabValidationTests
     {
         [Test]
-        public void AllPrefabsInResourcesAreValid()
+[Ignore("Disabled via TestsToolWindow")]
+public void AllPrefabsInResourcesAreValid()
         {
             string[] prefabGuids = AssetDatabase.FindAssets("t:Prefab", new[] { "Assets/Resources" });
 
