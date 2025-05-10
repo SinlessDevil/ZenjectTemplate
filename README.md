@@ -1,7 +1,7 @@
 # 🧩 Unity Zenject Template
 
 A clean, modular Unity template built on [Zenject](https://github.com/modesttree/Zenject), designed for scalable game projects. Includes core services, state machine, tool integrations, URP setup, and a full test suite.
-## ✨ Features
+### ✨ Features
 - **🧠 State Machine (Game Flow)** — `Bootstrap → Load → Menu → Game → Win/Lose`  
 - **🏗️ Factory Services** — UI, Game, Widget, and Scene instantiation  
 - **📊 Static Data System** — Loadable config data for sounds, levels, etc.  
@@ -12,7 +12,7 @@ A clean, modular Unity template built on [Zenject](https://github.com/modesttree
 - **🐞 SRDebugger** — Integrated in-game debug UI  
 - **📁 Modular Structure** — Clean separation into Code, Plugins, Tests, Resources
 
-## 🧪 Test Coverage
+### 🧪 Test Coverage
 **EditMode:**
 - `GuidDuplicationTest` — detects duplicate `.meta` GUIDs  
 - `ResourcesPrefabValidationTests` — checks for missing scripts in `Resources` prefabs  
@@ -27,26 +27,23 @@ A clean, modular Unity template built on [Zenject](https://github.com/modesttree
 **PlayMode:**
 - `WidgetProvider Tests` — tests prefab resolution and instantiation
 
-
-## 📦 Included Tools
+### 📦 Included Tools
 - [🔧 CI GitHub Action](https://github.com/SinlessDevil/CI)
 - [💾 SaveSystemToolkit](https://github.com/SinlessDevil/SaveSystemToolkit)
 - [🎵 AudioVibrationKit](https://github.com/SinlessDevil/AudioVibrationKit)
 - [🧪 TestToolKit](https://github.com/SinlessDevil/TestToolKit)
 
-## ✅ Entry Point
+### ✅ Entry Point
 The `BootstrapInstaller` (via `Zenject`) wires up:
 - Core services (UI, Level, SaveLoad, Storage, Audio)
 - Game StateMachine & States
 - Static Data loaders
 - Coroutine runner and loading curtain
 
-## 📏 Architecture Overview
-
+### 📏 Architecture Overview
 The project is structured with a modular architecture, using **Zenject** as the Dependency Injection framework. It is designed to support mid-core and hybrid-casual projects out of the box. Below is an overview of the core systems and services:
 
 ### 📆 Core Components
-
 * **🌀 Game State Machine**
   A flexible state machine with separate classes for each game state:
   * `BootstrapState`, `LoadProgressState`, `LoadMenuState`, `LoadLevelState`, `GameLoopState`, etc.
@@ -68,14 +65,3 @@ The project is structured with a modular architecture, using **Zenject** as the 
   Includes `WinService` and `LoseService` for handling end-of-level logic.
 * **🚪 Coroutine and Loading Curtain**
   Mono-based services used for async logic and visual transitions.
-
-## 📁 Project Structure
-```
-Assets/
-├── Code/              # Main game logic
-├── Plugins/           # External & internal plugins
-├── Tests/             # EditMode + PlayMode unit tests
-├── ThirdParty/        # NiceVibrations, SRDebugger, etc.
-├── Resources/         # Static data and assets
-├── Scenes/            # Game and menu scenes
-```
